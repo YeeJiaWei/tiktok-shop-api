@@ -16,7 +16,7 @@ trait HttpNode
         return new GuzzleClient(['base_uri' => $this->client->apiHost]);
     }
 
-    public function getParameters($uri, array $params)
+    public function getParameters($uri, array $params = [])
     {
         $params = [
             'app_key' => $this->client->appKey,
@@ -59,9 +59,10 @@ trait HttpNode
 
     protected function post($uri, array $params = [])
     {
-        $params = $this->getParameters($uri, $params);
-
-        $response = $this->getClient()->request('POST', $this->getPath($uri), $params);
+        $response = $this->getClient()->request('POST', $this->getPath($uri), [
+            RequestOptions::QUERY => $this->getParameters($uri),
+            RequestOptions::JSON => $params,
+        ]);
 
         $response = new Response($response, $params);
 
