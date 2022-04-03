@@ -13,6 +13,31 @@ class Product extends Node
         return '/products';
     }
 
+    public function getCategory()
+    {
+        return $this->get('/categories', []);
+    }
+
+    /**
+     * @param string $categoryId
+     * @return mixed
+     */
+    public function getCategoryAttribute(string $categoryId)
+    {
+        return $this->get('/attributes', ['category_id' => $categoryId]);
+    }
+
+    /**
+     * To get category which 'is_leaf' is true
+     *
+     * @param string $categoryId
+     * @return mixed
+     */
+    public function getCategoryRule(string $categoryId)
+    {
+        return $this->get('/categories/rules', ['category_id' => $categoryId]);
+    }
+    
     public function getProductList(array $params = [])
     {
         return $this->post('/search', $params);
