@@ -14,6 +14,7 @@ namespace Yeejiawei\TiktokShopApi;
  * @method \Yeejiawei\TiktokShopApi\Nodes\Logistics logistics()
  * @method \Yeejiawei\TiktokShopApi\Nodes\Finance finance()
  * @method \Yeejiawei\TiktokShopApi\Nodes\ReverseOrder reverseOrder()
+ * @method \Yeejiawei\TiktokShopApi\Nodes\Fulfillment fulfillment()
  */
 class Client
 {
