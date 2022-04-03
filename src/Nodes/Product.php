@@ -37,7 +37,32 @@ class Product extends Node
     {
         return $this->get('/categories/rules', ['category_id' => $categoryId]);
     }
-    
+
+    public function getBrand(array $params = [])
+    {
+        return $this->get('/brands', $params);
+    }
+
+    public function uploadImage(array $params = [])
+    {
+        return $this->post('/upload_imgs', $params);
+    }
+
+    public function uploadFile(array $params = [])
+    {
+        return $this->post('/upload_files', $params);
+    }
+
+    public function createProduct(array $params = [])
+    {
+        return $this->post('/', $params);
+    }
+
+    public function editProduct(array $params = [])
+    {
+        return $this->put('/', $params);
+    }
+
     public function getProductList(array $params = [])
     {
         return $this->post('/search', $params);
@@ -76,6 +101,16 @@ class Product extends Node
             'product_id' => $productId,
             'skus' => $skus,
         ]);
+    }
+
+    public function deleteProducts(array $params = [])
+    {
+        return $this->delete('/', $params);
+    }
+
+    public function recoverProduct(array $params = [])
+    {
+        return $this->post('/recover', $params);
     }
 
     public function activateProducts(array $productIds = [])
