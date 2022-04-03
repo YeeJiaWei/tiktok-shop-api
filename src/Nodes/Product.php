@@ -53,3 +53,13 @@ class Product extends Node
         ]);
     }
 
+    public function activateProducts(array $productIds = [])
+    {
+        return $this->post('/activate', ['product_ids' => $productIds]);
+    }
+
+    public function deactivateProducts(array $productIds = [])
+    {
+        return $this->post('/inactivated_products', ['product_ids' => $productIds]);
+    }
+}
