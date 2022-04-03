@@ -16,40 +16,10 @@ trait HttpNode
         return new GuzzleClient(['base_uri' => $this->client->apiHost]);
     }
 
-    public function getParameters($uri, array $params = [])
-    {
-        $params = [
-            'app_key' => $this->client->appKey,
-            'access_token' => $this->client->accessToken,
-            'shop_id' => $this->client->shopId,
-            'timestamp' => time(),
-        ];
-
-        $params['sign'] = $this->generateSignature($uri, $params);
-
-
-        return $params;
-    }
-
-    private function getPath($uri): string
-    {
-        return $this->api_path . $this->getNodeEndpoint() . $uri;
-    }
-
     protected function get($uri, array $params = [])
     {
-        $params = array_merge($params, [
-            'app_key' => $this->client->appKey,
-            'access_token' => $this->client->accessToken,
-            'shop_id' => $this->client->shopId,
-            'timestamp' => time(),
-        ]);
-        $params = array_filter($params);
-
-        $params['sign'] = $this->generateSignature($uri, $params);
-
         $response = $this->getClient()->request('GET', $this->getPath($uri), [
-            RequestOptions::QUERY => http_build_query($params),
+            RequestOptions::QUERY => $this->getParameters($uri, $params),
         ]);
 
         $response = new Response($response, $params);
@@ -83,9 +53,33 @@ trait HttpNode
 
     protected function delete($uri, array $params = [])
     {
-//        $this->post($this->api_path . $this->getNodeEndpoint() . $uri);
+        $response = $this->getClient()->request('POST', $this->getPath($uri), [
+            RequestOptions::QUERY => $this->getParameters($uri),
+            RequestOptions::JSON => $params,
+        ]);
 
-        return 'test';
+        $response = new Response($response, $params);
+
+        return $response->object();
+    }
+
+    private function getPath($uri): string
+    {
+        return $this->api_path . $this->getNodeEndpoint() . $uri;
+    }
+
+    private function getParameters($uri, array $params = [])
+    {
+        $params = array_merge($params, [
+            'app_key' => $this->client->appKey,
+            'access_token' => $this->client->accessToken,
+            'shop_id' => $this->client->shopId,
+            'timestamp' => time(),
+        ]);
+
+        $params['sign'] = $this->generateSignature($uri, $params);
+
+        return $params;
     }
 
     private function generateSignature($uri, $params)
